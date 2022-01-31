@@ -1,0 +1,23 @@
+.container{
+    flex: auto;
+    width: 100%;
+}
+
+.title{
+    text-align: center;
+    font-size: 30px;
+    padding: 40px;
+
+}
+
+.content{
+    border: 1px red !important;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.opcoes{
+    padding: 20px;
+}

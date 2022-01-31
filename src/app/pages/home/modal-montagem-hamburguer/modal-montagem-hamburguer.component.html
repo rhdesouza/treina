@@ -1,0 +1,30 @@
+<div class="modalTilte">
+    Lista de Ingredientes
+</div>
+
+<form [formGroup]="itensForm" style="width: 100%;" (ngSubmit)="salvar()">
+    <mat-form-field appearance="outline" style="width: 100%;">
+        <mat-label>Cliente</mat-label>
+        <input matInput placeholder="Cliente" formControlName="cliente">
+    </mat-form-field>
+    <div class="row" formArrayName="itens">
+        <table style="width: 100%;">
+            <thead>
+                <th>Ingrediente</th>
+                <th>Quantidade</th>
+            </thead>
+            <tbody *ngFor="let ingredientes of itens.controls; let i=index" formGroupName="{{i}}">
+                <td style="width: 70%;">
+                    <input matInput class="inputField" type="text" formControlName="ingrediente" readonly>
+                </td>
+                <td style="text-align: center; width: 30%;">
+                    <input matInput class="inputField" type="number" formControlName="qtd">
+                </td>
+            </tbody>
+        </table>
+    </div>
+    <div style="width: 100%;margin-top: 15px;">
+        <button mat-raised-button type="submit" color="primary">Salvar</button>
+        <button mat-button (click)="fechar()" style="float: right;">Fechar</button>
+    </div>
+</form>
