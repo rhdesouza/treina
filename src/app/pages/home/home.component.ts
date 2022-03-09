@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { Ingredientes } from 'src/app/models/ingredientes';
 import { StorageService } from 'src/app/services/storage.service';
 import { ModalIngredientesComponent } from './modal-ingredientes/modal-ingredientes.component';
-import { ModalMontagemHamburguerComponent } from './modal-montagem-hamburguer/modal-montagem-hamburguer.component';
 
 @Component({
   selector: 'app-home',
@@ -24,18 +24,33 @@ export class HomeComponent implements OnInit {
     {
       ingrediente: "Hambúrguer Vegano",
       default: true
+    },
+    {
+      ingrediente: "Azeitona",
+      default: true
+    },
+    {
+      ingrediente: "Picles",
+      default: true
+    },
+    {
+      ingrediente: "Bacon",
+      default: true
     }
+
   ];
 
   listPedidos: string[] = []
 
   constructor(
     private storageService: StorageService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
     this.storageService.setListIngredientes(this.ingredientesList);
+    this.listPedidos = this.storageService.getListVenda();
   }
 
   public abrirModaIngredientes = () => {
@@ -62,14 +77,17 @@ export class HomeComponent implements OnInit {
 
 
   public abrirModalMontarHamburguer = () => {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '40%';
-    dialogConfig.data = this.ingredientesList;
+    /*  const dialogConfig = new MatDialogConfig();
+     dialogConfig.disableClose = true;
+     dialogConfig.width = '40%';
+     dialogConfig.data = this.ingredientesList;
+ 
+     this.dialog.open(ModalMontagemHamburguerComponent, dialogConfig).afterClosed().subscribe(() => {
+       this.ingredientesList = this.storageService.getListIngredientes();
+       this.listPedidos = this.storageService.getListVenda();
+     }); */
 
-    this.dialog.open(ModalMontagemHamburguerComponent, dialogConfig).afterClosed().subscribe(() => {
-      this.ingredientesList = this.storageService.getListIngredientes();
-      this.listPedidos = this.storageService.getListVenda();
-    });
+    this.router.navigate(['pedidos'])
+
   }
 }

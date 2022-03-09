@@ -1,30 +1,33 @@
-import { Component, Inject, OnInit, Optional } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { ModalSucessComponent } from 'src/app/components/modal-sucess/modal-sucess.component';
 import { Ingredientes } from 'src/app/models/ingredientes';
 import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
-  selector: 'app-modal-montagem-hamburguer',
-  templateUrl: './modal-montagem-hamburguer.component.html',
-  styleUrls: ['./modal-montagem-hamburguer.component.scss']
+  selector: 'app-montagem-hamburguer',
+  templateUrl: './montagem-hamburguer.component.html',
+  styleUrls: ['./montagem-hamburguer.component.scss']
 })
-export class ModalMontagemHamburguerComponent implements OnInit {
-  public listaIngredientes: Ingredientes[] = [];
-
+export class MontagemHamburguerComponent implements OnInit {
+  private  listaIngredientes: Ingredientes[] = [];
   constructor(
     private storageService: StorageService,
     private fb: FormBuilder,
-    private dialog: MatDialog
-  ) { }
+    private dialog: MatDialog,
+    private router: Router
+  ) { 
+    this.listaIngredientes = this.storageService.getListIngredientes();
+  }
 
   public itensForm: FormGroup = this.fb.group({
     cliente: this.fb.control('', Validators.required),
     itens: this.fb.array([], Validators.required)
   });
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.listaIngredientes = this.storageService.getListIngredientes();
     this.listaIngredientes.forEach(x => this.adicionarItem(this.novoItem(x.ingrediente)));
   }
@@ -45,7 +48,7 @@ export class ModalMontagemHamburguerComponent implements OnInit {
   }
 
   public fechar = () => {
-    //this.dialogRef.close();
+    this.router.navigate(['inicio']);
   };
 
   public salvar = () => {
@@ -59,7 +62,7 @@ export class ModalMontagemHamburguerComponent implements OnInit {
       this.storageService.setListVenda(listPedido);
 
       this.dialog.open(ModalSucessComponent, dialogConfig).afterClosed().subscribe(() => {
-        //this.dialogRef.close();
+        this.fechar();
       });
     }
   }
@@ -85,4 +88,5 @@ export class ModalMontagemHamburguerComponent implements OnInit {
 
     return true;
   }
+
 }
